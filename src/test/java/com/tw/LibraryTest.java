@@ -1,32 +1,41 @@
 package com.tw;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class LibraryTest {
+
+    @Before
+    public void setup(){
+        System.setOut(new PrintStream(new ByteArrayOutputStream()));
+    }
+   
     @Test
-    public void testSomeLibraryMethod() {
-        Library classUnderTest = new Library();
-        assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
+    public void should_invoke_addStudentInfo_when_input_1(){
+        InputHandler mockInputHandler = mock(InputHandler.class);
+        when(mockInputHandler.getMainMenuInput()).thenReturn(1).thenReturn(3);
+
+        Controller mockController = mock(Controller.class);
+
+        new Library(new View(), mockInputHandler, mockController).init();
+        verify(mockController).addStudentInfo();
     }
 
     @Test
-    public void testMockClass() throws Exception {
-        // you can mock concrete classes, not only interfaces
-        LinkedList mockedList = mock(LinkedList.class);
+    public void should_invoke_buildReport_when_input_2(){
+        InputHandler mockInputHandler = mock(InputHandler.class);
+        when(mockInputHandler.getMainMenuInput()).thenReturn(2).thenReturn(3);
 
-        // stubbing appears before the actual execution
-        String value = "first";
-        when(mockedList.get(0)).thenReturn(value);
+        Controller mockController = mock(Controller.class);
 
-        assertEquals(mockedList.get(0), value);
-
+        new Library(new View(), mockInputHandler, mockController).init();
+        verify(mockController).buildReport();
     }
 
+    
 }
